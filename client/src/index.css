@@ -1,9 +1,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
 
-@import "tailwindcss";
+/* @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap'); */
+ @import "tailwindcss";
 
 @theme {
+  --section-height: 500px;
+
   --text-course-details-heading-small: 26px;
   --text-course-details-heading-small--line-height: 36px;
 
@@ -19,10 +22,15 @@
   --text-default: 15px;
   --text-default--line-height: 21px;
 
+  --grid-cols-auto: repeat(auto-fit, minmax(250px, 1fr));
 }
-@theme{
-     --grid-cols-auto: repeat(auto-fit, minmax(250px, 1fr));
+
+@utility h-section-height {
+  height: var(--section-height);
 }
-*{
-    font-family: Outfit;
-}
+
+* {
+  font-family: Outfit;
+} */ *
+
+

@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
  # Environment variables
 .env
+# https://chatgpt.com/c/69bab176-2710-8322-8530-0fffaec1405e=> chat gpt link for this code explaination of student folder

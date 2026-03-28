@@ -11,6 +11,8 @@ const userSchema=new mongoose.Schema(
                 type:mongoose.Schema.Types.ObjectId,
                 ref:'course'
             }
-        ]
-    }
-)
+        ],
+    },{timeStamps:true}
+);
+const User=mongoose.model('User',userSchema);
+export default User

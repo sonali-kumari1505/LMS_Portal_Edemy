@@ -1,5 +1,5 @@
 // import express from 'express'
-import mongoose from "mongooose"
+import mongoose from "mongoose"
 const userSchema=new mongoose.Schema(
     {
         _id:{type:String,required:true},

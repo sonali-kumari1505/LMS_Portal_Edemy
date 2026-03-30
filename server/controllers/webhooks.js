@@ -2,10 +2,11 @@ import { Webhook } from "svix";
 import User from "../models/User.js";
 // Api controller function to manage clerk user with database
 export const clerkWebhooks=async(req,res)=>{
+    // api controller function and it handles webhooks requests
 try{
 const whook=new Webhook(process.env.CLERK_WEBHOOK_SECRET)
-await whook.verify(JSON.stringify(req.body),{
-  "svix-id"  :req.headers["svix-id"],
+await whook.verify(JSON.stringify(req.body),{ //it verify that request is automatically coming from clerk
+  "svix-id"  :req.headers["svix-id"], 
   "svix-timestamp":req.headers["svix-timestamp"],
 "svix-signature":req.headers["svix-signature"]
 })
@@ -16,7 +17,7 @@ const userData={
     _id:data.id,
     email:data.email_addresses[0].email_address,
     name:data.first_name+" "+data.last_name,
-    imageUrl:data.imageUrl,
+    imageUrl:data.image_Url,
 }
 await User.create(userData)
 res.json({})
@@ -25,23 +26,23 @@ break;
         case 'user.updated':{
 const userData={
     
-    email:data.email_address[0].email_address,
+    email:data.email_addresses[0].email_address,
     name:data.first_name+" "+data.last_name,
-    imageUrl:data.imageUrl,
+    imageUrl:data.image_Url,
 }
-await User.findByIdandUpdate(data.id,userData)
+await User.findByIdAndUpdate(data.id,userData)
 res.json({})
 break;
     }
         case 'user.deleted':{
-await User.findByIdandDelete(data.id)
+await User.findByIdAndDelete(data.id)
 res.json({})
 break;
     }
     default:break;
 }
 }catch(error){
-res.json({success:false,message:error.message})
+res.status(500).json({success:false,message:error.message})
 }
 }
 // a post call from the the external server that is from the paytm like app from our server thata payment is done by the user that is called the server to the server communication ==> for changing 

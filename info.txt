@@ -1,0 +1,13 @@
+webhook do not run on localhost so we need svix to run it
+express js behind the scene http use karta hai
+node has hhttp but express has advance feature than http of node so we are using express js here
+ a laptop has node as software which will bw use to build the seerver
+ express is help to build the seerver
+ in http server code we have to write a lot of code like it is called server side rendering
+ so we havve made a simple solution to use express to make the server
+ ///-------
+ express js is a pkakge which is behind the scene use the http 
+ //request read the routing and match with the url and jis se v execute ho jayega use select kar liya jayega
+ edemy is the clerk application for this
+ At 8 hour completed till 15th june
+ and now  start from cloudinary which i signup using rajput wala email

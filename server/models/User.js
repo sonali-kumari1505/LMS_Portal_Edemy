@@ -11,7 +11,7 @@ const userSchema=new mongoose.Schema(
         enrolledCourses:[
             {
                 type:mongoose.Schema.Types.ObjectId,
-                ref:'course'
+                ref:'Course'
             }
         ],
     },{timestamps:true}

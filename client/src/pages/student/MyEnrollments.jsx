@@ -5,7 +5,7 @@ import Footer from '../../components/student/Footer'
 const MyEnrollments = () => {
   const {enrollCourses,calculateCourseDuration,navigate}=useContext(AppContext)
   const[progressArray,setProgressArray]=useState([
-    {lectureCompleted:2,totalLectures:4},
+    {lectureCompleted:4,totalLectures:4},
        {lectureCompleted:2,totalLectures:4},
         {lectureCompleted:2,totalLectures:4},
        {lectureCompleted:2,totalLectures:4},
@@ -46,18 +46,16 @@ const MyEnrollments = () => {
                 <p className='mb-1 max-sm:text-sm'>{course.courseTitle}</p>
         <Line strokeWidth={2} percent={progressArray[index]?(progressArray[index].lectureCompleted*100)/progressArray[index].totalLectures:0} className='bg-gray-300 rounded-full'/>
               </div>
-            </td>
+  </td>  <td className='px-4 py-3 max-sm:hidden'>{calculateCourseDuration(course)}</td>
+  <td className='px-4 py-3 max-sm:hidden' >{progressArray[index]&&`${progressArray[index].lectureCompleted}/${progressArray[index].totalLectures}`}<span>Lectures</span></td> 
 
-            <td className='px-4 py-3 max-sm:hidden'>{calculateCourseDuration(course)}</td>
-            <td className='px-4 py-3 max-sm:hidden' >{progressArray[index]&&`${progressArray[index].lectureCompleted}/${progressArray[index].totalLectures}`}<span>Lectures</span></td> 
-          
-            <td className='px-4 py-3 max-sm:text-right'>
-              <button className='px-3 sm:px-5 py-1.5 sm:py-2 bg-blue-600 max-sm:text-xs text-white' onClick={()=>navigate('/player/'+course._id)}>
-                {
-                    progressArray[index]&& progressArray[index].lectureCompleted/progressArray[index].totalLectures==1?"completed":"on Going"
-                }</button>
-            </td>
-          </tr>
+  <td className='px-4 py-3 max-sm:text-right'>
+    <button className='px-3 sm:px-5 py-1.5 sm:py-2 bg-blue-600 max-sm:text-xs text-white' onClick={()=>navigate('/player/'+course._id)}>
+      {
+          progressArray[index]&& progressArray[index].lectureCompleted/progressArray[index].totalLectures==1?"completed":"on Going"
+      }</button>
+  </td>
+</tr>
           
         ))}
       </tbody>

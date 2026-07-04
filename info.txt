@@ -11,3 +11,27 @@ node has hhttp but express has advance feature than http of node so we are using
  edemy is the clerk application for this
  At 8 hour completed till 15th june
  and now  start from cloudinary which i signup using rajput wala email
+
+ {
+     "courseTitle": "Data Science with Python",
+        "courseDescription": "Start Your Data Science ",
+        "coursePrice": 89.99,
+        "isPublished": true,
+         "discount": 20,
+        "courseContent": [
+        {"chapterId": "chapter1",
+                "chapterOrder": 1,
+                "chapterTitle": "Python for Data Science",
+                "chapterContent": [
+             
+          {   "lectureId": "lecture1",
+                        "lectureTitle": "Python Basics",
+                        "lectureDuration": 30,
+                        "lectureUrl": "https://youtu.be/samplelink1",
+                        "isPreviewFree": true,
+                        "lectureOrder": 1
+        }]
+        }]
+ }
+
+ : what .populate will doYou said: what .populate will do +>The populate() method in Mongoose (MongoDB) automatically replaces a stored reference ID (ObjectId) in a document with the actual data from another collection.It mimics a SQL JOIN operation by running an additional query behind the scenes to fetch and stitch the related data together

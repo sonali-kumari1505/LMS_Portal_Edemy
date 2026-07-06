@@ -1,5 +1,7 @@
-
+import { getAuth} from '@clerk/express'
 import Course from '../models/course.js';
+import User from '../models/User.js';
+import  Purchase from '../models/Purchase.js'
 //get ALl courses
 export const getAllCourse=async(req,res)=>{
     try{

@@ -28,3 +28,4 @@ yarn-error.log*
 # Optional
 *.local
 .txt
+server/controllers/courseController.js

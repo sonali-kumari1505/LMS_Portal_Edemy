@@ -5,6 +5,7 @@ import {Purchase} from '../models/Purchase.js'
 // why curly in one or not
 import Course from '../models/course.js';
 import Stripe from 'stripe';
+// for get user data
 export const getUserData=async(req,res)=>{
     try{
  const {userId}=getAuth(req);
@@ -31,7 +32,7 @@ res.json({success:false,message:error.message})
     }
 }
 
-// for purchased course 
+// for purchased course controlller
 export const purchaseCourse=async(req,res)=>{
     try{
 const {courseId}=req.body;
@@ -49,20 +50,20 @@ const purchaseData={
 }
 const newPurchase=await Purchase.create(purchaseData)
 // stripe gateway initializer
-const stripeInstance =new stripeInstance(process.env.STRIPE_SECRET_KEY)
+const stripeInstance =new Stripe(process.env.STRIPE_SECRET_KEY)
 const currency=process.env.CURRENCY.toLowerCase()
 // creating line items for stripe and use it to create payment session
 const line_items=[{
     price_data:{
-        currency,
-        price_data:{
+        currency:currency,
+        product_data:{
             name:courseData.courseTitle
         },
         unit_amount:Math.floor(newPurchase.amount)*100
     },
     quantity:1
 }]
-
+// using above line items w can make one  payment session
 const session=await stripeInstance.checkout.sessions.create({
     success_url:`${origin}/loading/my-enrollments`,
         cancel_url:`${origin}/`,
@@ -73,9 +74,9 @@ purchaseId:newPurchase._id.toString()
         }
 
 })
-res.json({success:true,session_url:session_url})
+res.json({success:true,session_url:session.url})
     }
     catch(error){
- res.json({successs:true,message:error.message})
+ res.json({successs:false,message:error.message})
     }
 }

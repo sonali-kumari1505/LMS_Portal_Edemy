@@ -1,6 +1,6 @@
 import { clerkClient,getAuth } from "@clerk/express";
 // import { useClerk, UserButton,useUser} from '@clerk/react'
-//
+//protect educator rojute
 export const protectEducator=async(req,res,next)=>{
 try{
 const {userId}=getAuth(req)

@@ -46,7 +46,7 @@ if(!userData || !courseData){
 const purchaseData={
     courseId:courseData._id,
     userId,
-    amount:(courseData.coursePrice-courseData.discount*courseData.coursePrice/100).toFixed(2),
+    amount:(courseData.coursePrice-courseData.discount*courseData.coursePrice/100).toFixed(2),  //decimal ke bad kitna digit written as to fixed(3)
 }
 const newPurchase=await Purchase.create(purchaseData)
 // stripe gateway initializer
@@ -55,7 +55,7 @@ const currency=process.env.CURRENCY.toLowerCase()
 // creating line items for stripe and use it to create payment session
 const line_items=[{
     price_data:{
-        currency:currency,
+        currency,
         product_data:{
             name:courseData.courseTitle
         },
@@ -64,7 +64,9 @@ const line_items=[{
     quantity:1
 }]
 // using above line items w can make one  payment session
+
 const session=await stripeInstance.checkout.sessions.create({
+    // origin get from above req.headers
     success_url:`${origin}/loading/my-enrollments`,
         cancel_url:`${origin}/`,
         line_items:line_items,
@@ -74,6 +76,8 @@ purchaseId:newPurchase._id.toString()
         }
 
 })
+
+
 res.json({success:true,session_url:session.url})
     }
     catch(error){

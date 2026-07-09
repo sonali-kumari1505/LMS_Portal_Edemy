@@ -35,3 +35,12 @@ node has hhttp but express has advance feature than http of node so we are using
  }
 
  : what .populate will doYou said: what .populate will do +>The populate() method in Mongoose (MongoDB) automatically replaces a stored reference ID (ObjectId) in a document with the actual data from another collection.It mimics a SQL JOIN operation by running an additional query behind the scenes to fetch and stitch the related data together
+ check for educator couesws
+ 9:14 token verify use header and 
+
+ .toFixed(2)-->>
+Formats the result to 2 decimal places.
+Returns a string, not a number.
+parse it to number or floar if needed
+
+sesssion url is not pass

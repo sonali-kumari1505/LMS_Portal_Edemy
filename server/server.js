@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+import 'dotenv/config';
 import connectDB from './configs/mongodb.js';
 import { clerkWebhooks, stripeWebhooks } from './controllers/webhooks.js';
 import educatorRouter from './routes/educatorRoutes.js';
@@ -9,7 +9,7 @@ import connectCloudinary from './configs/cloudinary.js';
 import courseRouter from './routes/courseRoute.js';
 import userRouter from './routes/userRoutes.js';
 
-dotenv.config(); // ✅ correct usage
+// dotenv.config(); // ✅ correct usage
 
 const app = express();
 

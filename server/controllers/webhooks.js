@@ -1,6 +1,6 @@
 import { Webhook } from "svix";
 import User from "../models/User.js";
-// import Stripe from 'stripe'
+import Stripe from 'stripe'
 import { Purchase } from "../models/Purchase.js";
 import Course from "../models/course.js";
 // Api controller function to manage clerk user with database
@@ -69,6 +69,7 @@ res.json({success:false,message:error.message})
 
 // for creatin gunction of stripe
 const stripeInstance =new Stripe(process.env.STRIPE_SECRET_KEY);
+console.log("Stripe Key:", process.env.STRIPE_SECRET_KEY);
 export const stripeWebhooks=async(request,response)=>{
 const sig=request.headers['stripe-signature'];
 let event;
@@ -82,7 +83,7 @@ catch(error){
 
 }
 
-}
+
 // handle the event
 switch(event.type){
     case'payment_intent.succeeded':{
@@ -122,5 +123,6 @@ await purchaseData.save()
     }
     response.json({received:true});
 }
+ 
 
-
+}

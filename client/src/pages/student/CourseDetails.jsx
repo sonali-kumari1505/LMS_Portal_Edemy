@@ -6,23 +6,70 @@ import { assets } from '../../assets/assets'
 import humanizeDuration from 'humanize-duration'
 import Footer from '../../components/student/Footer'
 import YouTube from 'react-youtube'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 const CourseDetails = () => {
 
   const { id } = useParams()
-  const [courseData, setCourseData] = useState(null)
+  const [courseData, setCourseData] = useState(null)                                           
   const [openSections, setOpenSections] = useState({})
   const [isAlreadyEnrolled, setIsAlreadyEnrolled] = useState(false)
   const[playerData,setPlayerData]=useState()
-  const { allCourses, calculateRating, calculateNoOfLectures, calculateCourseDuration, calculateChapterTime, currency } = useContext(AppContext)
+  const { allCourses, calculateRating, calculateNoOfLectures, calculateCourseDuration, calculateChapterTime, currency,  backendUrl,userData,getToken} = useContext(AppContext)
 
-  const fetchCourseData = () => {
-    const findCourse = allCourses.find(course => course._id === id)
-    setCourseData(findCourse || null)
+  const fetchCourseData =async () => {
+   try{
+const {data} =await axios.get(backendUrl + '/api/course/' + id)
+if(data.success){
+  setCourseData(data.courseData)
+  toast.success(data.message)
+}else{
+   toast.error(data.message)
+}
+   }catch(error){
+ toast.error(error.message)
+   }
   }
-
-  useEffect(() => {
+const enrollCourse=async()=>{
+  try{
+    if(!userData){
+      return toast.warn('log in to enroll')
+    }
+    if(isAlreadyEnrolled){
+      return toast.warn('already enrolled')
+    }
+const token= await getToken();
+const {data}=await axios.post(backendUrl + '/api/user/purchase',{courseId:courseData._id},{headers:{Authorization:`Bearer ${token}`}})
+if(data.success){
+const {session_url}=data
+window.location.replace(session_url)
+}else{
+   toast.error(data.message)
+}
+  }catch(error){
+ toast.error(error.message)
+  }
+}
+  // useEffect(() => {
+  //   fetchCourseData()
+  // }, [])
+    useEffect(() => {
     fetchCourseData()
-  }, [allCourses])
+  }, [])
+   useEffect(() => {
+ if(userData && courseData){
+  console.log("from course details usedeffecy",userData)
+  // setIsAlreadyEnrolled(userData.enrolledCourses.includes(courseData._id))
+setIsAlreadyEnrolled(
+    userData.enrolledCourses?.some(course =>
+        (course._id || course).toString() === courseData._id.toString()
+    )
+)
+
+
+ }
+  }, [userData,courseData])
+
   const toggleSection = (index) => {
     setOpenSections((prev) => (
       {
@@ -31,9 +78,9 @@ const CourseDetails = () => {
       }
     ))
   }
-  if (!courseData) return <Loading />
+  // if (!courseData) return <Loading />
 
-  return (
+  return courseData? (
     <>
 <div className='flex md:flex-row flex-col-reverse gap-10 relative items-start justify-between md:px-36 px-8 md:pt-30 pt-20 text-left'>
 
@@ -61,7 +108,7 @@ const CourseDetails = () => {
   {/* total number of rating */}
   <p>{courseData.enrolledStudents.length}{courseData.enrolledStudents.length > 1 ? 'students' : 'student'}</p>
 </div>
-<p className='text-sm'>course by<span className='text-blue-600 underline'>GreatStack</span></p>
+<p className='text-sm'>course by<span className='text-blue-600 underline'>{courseData.educator.name}</span></p>
 <div className='pt-8 text-gray-800'>
   {/* course structure  */}
             <h2>Course Structure</h2>
@@ -113,7 +160,7 @@ const CourseDetails = () => {
 </div>
 </div>
         {/* right column */}
-<div className='max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg=white min-w-[300px] sm:min-w-[420px]'>
+<div className='max-w-course-card z-10 shadow-custom-card rounded-t md:rounded-none overflow-hidden bg-white min-w-[300px] sm:min-w-[420px]'>
           {playerData? <YouTube videoId={playerData.videoId} opts={{playerVars:{
                 autoplay:1
               }}} iframeClassName='w-full aspect-video'/>:
@@ -146,7 +193,7 @@ const CourseDetails = () => {
       <p>{calculateNoOfLectures(courseData)}lessons</p>
     </div>
   </div>
-  <button className='md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium'>{isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}</button>
+  <button onClick={enrollCourse}   className='md:mt-6 mt-4 w-full py-3 rounded bg-blue-600 text-white font-medium'>{isAlreadyEnrolled ? 'Already Enrolled' : 'Enroll Now'}</button>
   <div className='pt-6'>
     <p className='md:text-xl text-lg font-medium text-gray-800' >what's in the course? </p>
     <ul className='ml-4 pt-2 text-sm md:text-default list-disc text-gray-500'>
@@ -164,7 +211,7 @@ const CourseDetails = () => {
       </div>
       <Footer />
     </>
-  )
+  ):<Loading />
 }
 
 export default CourseDetails

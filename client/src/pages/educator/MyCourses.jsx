@@ -2,15 +2,24 @@
 import React, { useContext, useEffect ,useState} from 'react'
 import { AppContext } from '../../context/AppContext'
 import Loading from '../../components/student/Loading'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 const MyCourses = () => {
-    const {currency,allCourses}=useContext(AppContext)
-  const [courses,setCourses]=useState([])
+    const {currency,backendUrl,getToken,isEducator}=useContext(AppContext)
+  const [courses,setCourses]=useState(null)
   const fetchEducatorCourses=async()=>{
-    setCourses(allCourses)
+    try{
+const token= await getToken();
+const {data}=await axios.get(backendUrl + '/api/educator/courses',{headers:{Authorization:`Bearer ${token}`}})
+data.success && setCourses(data.courses)
+    }catch(error){
+toast.error(error.message)
+    }
   }
   useEffect(()=>{
-    fetchEducatorCourses()
-  },[allCourses])
+   if(isEducator)
+   { fetchEducatorCourses()}
+  },[isEducator])
   return courses?(
     <div className='h-screen flex flex-col items-start justify-between md:p-8 md:pb-0 p-4 pt-8 pb-0'>
  <div className='w-full'>
@@ -40,8 +49,8 @@ const MyCourses = () => {
       <img src={course.courseThumbnail} alt="course Image" className='w-16'/>
       <span className='truncate hidden md:block'>{course.courseTitle}</span>
     </td>
-    <td className='px-4 py-3'>{currency}{Math.floor(course.enrolledStudents.length *(course.coursePrice-course.discount*course.coursePrice/100))}</td>
-     <td className='px-4 py-3'>{course.enrolledStudents.length}</td>
+    <td className='px-4 py-3'>{currency}{Math.floor(course.enrolledStudents?course.enrolledStudents.length:0 * (course.coursePrice-(course.discount*course.coursePrice)/100))}</td>
+     <td className='px-4 py-3'>{course.enrolledStudents?course.enrolledStudents.length:0}</td>
       <td className='px-4 py-3'>{new Date(course.createdAt).toLocaleDateString()}</td>
   </tr>
 ))}

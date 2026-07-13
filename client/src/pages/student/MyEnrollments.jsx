@@ -1,27 +1,45 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState ,useEffect} from 'react'
+
 import { AppContext } from '../../context/AppContext'
 import {Line} from 'rc-progress'
 import Footer from '../../components/student/Footer'
+import axios from 'axios'
+import { toast } from 'react-toastify'
 const MyEnrollments = () => {
-  const {enrollCourses,calculateCourseDuration,navigate}=useContext(AppContext)
-  const[progressArray,setProgressArray]=useState([
-    {lectureCompleted:4,totalLectures:4},
-       {lectureCompleted:2,totalLectures:4},
-        {lectureCompleted:2,totalLectures:4},
-       {lectureCompleted:2,totalLectures:4},
-        {lectureCompleted:2,totalLectures:4},
-       {lectureCompleted:2,totalLectures:4},
-        {lectureCompleted:2,totalLectures:4},
-       {lectureCompleted:2,totalLectures:6},
-        {lectureCompleted:3,totalLectures:4},
-       {lectureCompleted:2,totalLectures:4},
-        {lectureCompleted:5,totalLectures:4},
-       {lectureCompleted:2,totalLectures:4},
-        {lectureCompleted:2,totalLectures:4},
-       {lectureCompleted:2,totalLectures:6},
-        {lectureCompleted:2,totalLectures:4},
-       {lectureCompleted:3,totalLectures:10},
-  ]);
+  const {enrolledCourses,calculateCourseDuration,navigate,userData,calculateNoOfLectures,getToken,fetchUserEnrolledCourses,backendUrl}=useContext(AppContext)
+  const[progressArray,setProgressArray]=useState([]);
+// getcourseProgress
+const getCourseProgress=async()=>{
+  try{
+const token=await getToken()
+const tempProgressArray= await Promise.all(
+  enrolledCourses.map(async(course)=>{
+    const {data}=await axios.post(`${backendUrl}/api/user/get-course-progress`,{courseId:course._id},{
+      headers:{Authorization:`Bearer ${token}`}
+    })
+    let totalLectures=calculateNoOfLectures(course);
+    const lectureCompleted=data.progressData?data.progressData.lectureCompleted.length:0;
+    return {totalLectures,lectureCompleted}
+  })
+)
+setProgressArray(tempProgressArray);
+  }catch(error){
+toast.error(error.message)
+  }
+}
+ useEffect(()=>{
+ if(userData){
+
+ fetchUserEnrolledCourses()
+ }
+ },[userData])
+//  other useeffect for getcourseprogress
+ useEffect(()=>{
+ if(enrolledCourses.length>0){
+
+getCourseProgress()
+ }
+ },[enrolledCourses])
 
   return (
    
@@ -38,7 +56,7 @@ const MyEnrollments = () => {
         </tr>
       </thead>
       <tbody className='text-gray-700'>
-        {enrollCourses.map((course,index)=>(
+        {enrolledCourses.map((course,index)=>(
           <tr key={index} className='border-b  border-gray-500/20'>
             <td  className='md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3'>
               <img src={course.courseThumbnail} alt="" className='w-14 sm:w-24 md:w-28' />

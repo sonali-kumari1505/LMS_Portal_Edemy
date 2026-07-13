@@ -12,12 +12,14 @@
   "dependencies": {
     "@clerk/react": "^6.0.1",
     "@tailwindcss/vite": "^4.3.0",
+    "axios": "^1.18.1",
     "humanize-duration": "^3.33.2",
     "quill": "^2.0.3",
     "rc-progress": "^4.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.13.1",
+    "react-toastify": "^11.1.0",
     "react-youtube": "^10.1.0",
     "tailwindcss": "^4.3.0",
     "uniqid": "^5.4.0"

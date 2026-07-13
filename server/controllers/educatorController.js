@@ -2,11 +2,12 @@ import {clerkClient, getAuth} from '@clerk/express'
 import Course from '../models/course.js';
 import { v2 as cloudinary } from 'cloudinary';
 import { Purchase } from '../models/Purchase.js';
+import User from '../models/User.js';
 
 export const updateRoleToEducator=async(req,res)=>{
     try{
         const {userId}=getAuth(req);
-        console.log(req.auth)
+        
         console.log(userId)
         await clerkClient.users.updateUserMetadata(userId,{
             publicMetadata:{
@@ -24,13 +25,13 @@ res.json({success:false,message:error.message})
 //ad new course
 export const addCourse=async(req,res)=>{
     try{
-          console.log("Step 1");
+         
 const {courseData}=req.body
 const imageFile=req.file
-console.log("reqfile")
+
 console.log(req.file);
 console.log(req.file.path);
-  console.log("Step 2");
+
 const {userId}=getAuth(req)
      console.log("Step 3");
         console.log("User ID:", userId);
@@ -42,8 +43,6 @@ parsedCourseData.educator=userId
 const newCourse=await Course.create(parsedCourseData)
    console.log("Course Created");
    console.log(imageFile);
-//    console.log("========== FILE ==========");
-// console.log(req.file);
 console.log("Path:", req.file?.path);
 console.log("Mimetype:", req.file?.mimetype);
 console.log("Original Name:", req.file?.originalname);
@@ -59,7 +58,8 @@ res.json({success:true, message:'CourseAdded'})
 
     }
     catch(error){
-        console.log(error.response);
+        console.log("error from"
+          );
 console.log(error.http_code);
 console.log(error);
 res.json({success:false,message:error.message})
@@ -81,7 +81,7 @@ res.json({success:false,message:error.message})
 }
 
 // //getEducator DashBoard Datall
-export const EducatorDashBoard=async()=>{
+export const EducatorDashBoard=async(req,res)=>{
     try{
 const {userId}=getAuth(req)
 const courses=await Course.find({userId})

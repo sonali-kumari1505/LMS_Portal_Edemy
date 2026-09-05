@@ -22,16 +22,25 @@ res.json({success:false,message:error.message})
 
 //user enrolled courses with lectue link
 export const userEnrolledCourses=async(req,res)=>{
+   
     try{
  const {userId}=getAuth(req);
  const userData=await User.findById(userId).populate('enrolledCourses')
 
- 
+     if (!userData) {
+      return res.json({
+        success: false,
+        message: "User not found",
+      });
+    }
      res.json({success:true, enrolledCourses:userData.enrolledCourses})
     }catch(error){
 res.json({success:false,message:error.message})
     }
 }
+
+
+
 
 // for purchased course controlller
 export const purchaseCourse=async(req,res)=>{
@@ -82,7 +91,7 @@ purchaseId:newPurchase._id.toString()
 res.json({success:true,session_url:session.url})
     }
     catch(error){
- res.json({successs:false,message:error.message})
+ res.json({success:false,message:error.message})
     }
 }
 
@@ -93,7 +102,7 @@ export const updateUserCourseProgress=async(req,res)=> {
         const {courseId,lectureId}=req.body;
      const progressData=await CourseProgress.findOne({userId,courseId})
      if(progressData){
-        if(progressData.lecturecompleted.includes(lectureId)){
+        if(progressData.lectureCompleted.includes(lectureId)){
 return res.json({success:true,message:'Lecture Already completed'})
         }
         progressData.lectureCompleted.push(lectureId)
@@ -126,12 +135,12 @@ res.json({success:false,message:error.message})
     }
 
     // Addd user ratings to course
-    export const addUserRating=async(re1,res)=>{
-        const userId=
+    export const addUserRating=async(req,res)=>{
+        const{ userId }=
         getAuth(req);
-        const {courseId,lectureId}=req.body;
+        const {courseId,rating}=req.body;
         if(!courseId||!userId||!rating||rating<1||rating>5){
-           return  res.json({successs:false,message:'Invalid details'})
+           return  res.json({success:false,message:'Invalid details'})
         }
 try{
 const course=await Course.findById(courseId);
@@ -139,10 +148,10 @@ if(!course){
     return res.json({success:false,message:"Course not found."});
 }
 const user=await User.findById(userId);
-if(!user || user.enrolledCourses.includes(courseId)){
+if(!user || !user.enrolledCourses.includes(courseId)){
       return res.json({success:false,message:"user has not purchase this course"});  
 }
-const existingRatingIndex=course.courseRatings.findIndex(r=>r.userId===userId)
+const existingRatingIndex=course.courseRatings.findIndex(r=>r.userId.toString()===userId.toString())
 if(existingRatingIndex>-1){
     course.courseRatings[existingRatingIndex].rating=rating;
 }else{
@@ -151,7 +160,7 @@ if(existingRatingIndex>-1){
 await course.save();
 return res.json({success:true,message:'rating added'})
 }catch(error){
-return res.json({success:true,message:'rating added'})
+return res.json({success:false,message:error.message})
 }
 
     }

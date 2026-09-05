@@ -10,7 +10,7 @@ const courses=await Course.find({isPublished:true}).select(['-courseContent','-e
 res.json({success:true,courses});
     }catch(error){
         console.log("error from getAll courses",error)
-        res.json({successs:true,message:error.message})
+        res.json({success:false,message:error.message})
     }
 }
 // get Course by Id
@@ -29,6 +29,6 @@ courseData.courseContent.forEach(chapter=>{
 res.json({success:true,courseData})
     }catch(error){
           console.log("error from getAll courses By Is",error)
-        res.json({successs:true,message:error.message})
+        res.json({success:false,message:error.message})
     }
 }

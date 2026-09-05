@@ -86,6 +86,18 @@ fetcUserData()
 fetchUserEnrolledCourses()
 }
 },[user])
+// useEffect(()=>{
+//   fetchAllcourses()
+//   fetchUserEnrolledCourses()
+// },[])
+// const logToken=async()=>{
+//   console.log(await getToken());
+// }
+// useEffect(()=>{
+//   if(user){
+//     logToken()
+//   }
+// },[user])
 
 const calculateChapterTime=(chapter)=>{
   let time=0

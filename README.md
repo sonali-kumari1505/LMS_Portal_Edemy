@@ -2,6 +2,8 @@
 
 A modern, full-stack Learning Management System (LMS) built with **React**, **Node.js**, **Express**, and **MongoDB**. The platform empowers educators to publish and monetize courses while giving students an interactive learning environment with progress tracking, video lectures, and secure Stripe checkout.
 
+🌐 **Live Demo:** [https://lms-portal-edemy.vercel.app](https://lms-portal-edemy.vercel.app)
+
 ---
 
 ## 📌 About the Project

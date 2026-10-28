@@ -22,7 +22,7 @@ const CourseDetails = () => {
 const {data} =await axios.get(backendUrl + '/api/course/' + id)
 if(data.success){
   setCourseData(data.courseData)
-  toast.success(data.message)
+  if(data.message) toast.success(data.message)
 }else{
    toast.error(data.message)
 }

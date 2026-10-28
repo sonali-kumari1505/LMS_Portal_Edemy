@@ -6,6 +6,7 @@ import CourseDetails from './pages/student/CourseDetails'
 import MyEnrollments from './pages/student/MyEnrollments'
 import Player from './pages/student/Player'
 import Loading from './components/student/Loading'
+import VerifyPayment from './pages/student/VerifyPayment'
 import Educator from './pages/educator/Educator'
 import Dashboard from './pages/educator/Dashboard'
 import AddCourse from './pages/educator/AddCourse'
@@ -29,8 +30,9 @@ const App = () => {
         <Route path='/my-enrollments' element={<MyEnrollments />} />
         <Route path='/player/:courseId' element={<Player />} />
         <Route path='/loading/:path' element={<Loading />} />
+        <Route path='/verify-payment/:purchaseId' element={<VerifyPayment />} />
         <Route path='/educator' element={<Educator />}>
-          <Route path='/educator' element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
           <Route path='add-course' element={<AddCourse />} />
           <Route path='my-courses' element={<MyCourses />} />
           <Route path='student-enrolled' element={<StudentsEnrolled />} />

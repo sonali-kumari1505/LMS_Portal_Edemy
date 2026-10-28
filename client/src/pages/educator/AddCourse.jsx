@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import uniqid from 'uniqid'
+const generateId = () => {
+  return typeof crypto !== 'undefined' && crypto.randomUUID
+    ? crypto.randomUUID()
+    : Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
 import Quill from 'quill';
 import { assets } from '../../assets/assets';
 import { useContext } from 'react';
@@ -30,7 +34,7 @@ const handleChapter=(action,chapterId)=>{
     const title=prompt('Enter chapter Name:');
     if(title){
       const newChapter={
-        chapterId:uniqid(),
+        chapterId:generateId(),
         chapterTitle:title,
         chapterContent:[],
         collapsed:false,
@@ -74,7 +78,7 @@ const addLecture=()=>{
 const newLecture={
   ...lectureDetails,
 lectureOrder:chapter.chapterContent.length>0?chapter.chapterContent.slice(-1)[0].lectureOrder+1:1,
-lectureId:uniqid()
+lectureId:generateId()
 };
 chapter.chapterContent.push(newLecture);
       }
@@ -94,7 +98,8 @@ const handleSubmit=async(e)=>{
  try{
 e.preventDefault()
 if(!image){
-  toast.error('thumbnail Not Selected')
+  toast.error('thumbnail Not Selected');
+  return;
 }
 const courseData={
   courseTitle,
